@@ -1,7 +1,11 @@
 color specific text:
-structure like this inside of the style, exmaple from 404.html
-color: #b91c1c !important;
-<h4 style="font-size: 3em; margin-bottom: 0.5em; color: #b91c1c !important;">You Aren’t Supposed to Be Here.</h4>
+<h4 class="text-[3em] mb-2 text-[#b91c1c]">
+  You Aren’t Supposed to Be Here.
+</h4>
+text-[3em] → Custom font size of 3em (Tailwind’s arbitrary value syntax).
+mb-2 → Margin-bottom roughly equal to 0.5em. Tailwind has fixed spacing scales; mb-2 is usually 0.5rem, close enough. You can also do mb-[0.5em] if you want exact.
+text-[#b91c1c] → Sets the text color to that exact blood-red hex.
+
 
 
 
@@ -12,3 +16,26 @@ list-disc → shows bullets
 list-decimal → shows numbers
 list-inside → bullets inside padding
 space-y-2 → vertical spacing between items
+
+
+
+primary button:
+<a href="/" 
+   class="inline-block bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg 
+          hover:bg-indigo-500 hover:translate-y-[-2px] transition-transform transition-colors">
+  Return Home
+</a>
+Base classes
+  inline-block → Makes the <a> behave like a block-level element horizontally sized to its content, so padding and margin work like a button.
+  bg-indigo-600 → Sets the button’s background color (Indigo 600 from Tailwind’s color palette).
+  text-white → Makes the text white.
+  font-semibold → Semi-bold font weight for emphasis.
+  py-3 px-6 → Vertical (py-3) and horizontal (px-6) padding to make it look like a proper button.
+  rounded-lg → Gives the corners a large rounded radius.
+  shadow-lg → Adds a prominent drop shadow for depth and separation from the background.
+Hover / interactive classes
+  hover:bg-indigo-500 → Changes background color slightly on hover for visual feedback.
+  hover:translate-y-[-2px] → Moves the button up 2px when hovered, giving a subtle “lift” effect.
+Transition / animation classes
+  transition-transform → Smoothly animates any transform changes (like translate-y).
+  transition-colors → Smoothly animates color changes (like bg-indigo-600 → bg-indigo-500).
