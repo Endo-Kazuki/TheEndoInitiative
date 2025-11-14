@@ -1,1 +1,13 @@
+title: "Endo Initiative"
+description: "My personal site"
+url: "https://endoinitiative.com"
+baseurl: ""  # always empty for custom domains unless you publish to a subfolder
 
+markdown: kramdown
+theme: null
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+permalink: /:categories/:title/
