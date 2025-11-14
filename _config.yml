@@ -3,11 +3,3 @@ description: "Parent company for all the endeavors of Endo."
 url: "https://endoinitiative.com"
 baseurl: ""  # always empty for custom domains unless you publish to a subfolder
 
-markdown: kramdown
-theme: null
-
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-
-permalink: /:categories/:title/
