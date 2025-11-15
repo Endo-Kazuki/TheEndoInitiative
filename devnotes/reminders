@@ -1,3 +1,9 @@
+add spacing to text:
+class="py-8" this adds 4 on top and 4 below,
+to do this manually you would use pt-4 and pb-4
+
+
+
 color specific text:
 <h4 class="text-[3em] mb-2 text-[#b91c1c]">
   You Aren’t Supposed to Be Here.
