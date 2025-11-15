@@ -1,6 +1,8 @@
 add spacing to text:
 class="py-8" this adds 4 on top and 4 below,
 to do this manually you would use pt-4 and pb-4
+Tailwind only supports specific spacing scale values (0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 72, 80, 96 depending on config)
+if you ever want exact values use something like mb-[72px] or pt-[50]
 
 
 
