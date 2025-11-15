@@ -1,5 +1,6 @@
 add spacing to text:
 Tailwind only supports specific spacing scale values, not really sure what makes it work or not, py seems to cap out at 12 while mb can do roughly 20
+looking inside of the style.css i might be able to add custom values if i really needed to
 
 | Utility | Meaning                 |
 | ------- | ----------------------- |
