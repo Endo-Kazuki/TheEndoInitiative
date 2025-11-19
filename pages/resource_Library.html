@@ -3,106 +3,157 @@ layout: default
 title: Library
 permalink: /library
 ---
+
 <div class="max-w-3xl mx-auto p-4">
-  <input id="search-box" type="text" placeholder="Search posts..." class="w-full p-2 border rounded mb-4" />
+  <input 
+    id="search-box" 
+    type="text" 
+    placeholder="Search posts..." 
+    class="w-full p-2 border rounded mb-4"
+  />
+
   <div id="search-results" class="space-y-6"></div>
+
   <div class="flex justify-center">
-    <button id="load-more" class="mt-4 px-4 py-2 border rounded hover:bg-gray-100 hidden">Show More</button>
+    <button 
+      id="load-more" 
+      class="mt-4 px-4 py-2 border rounded hover:bg-gray-100 hidden"
+    >
+      Show More
+    </button>
   </div>
+
   <p id="debug" class="text-xs text-gray-500 mt-3"></p>
 </div>
 
-<!-- Fuse.js (fuzzy search) -->
+<!-- Fuse.js -->
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
 
 <script>
 (async function () {
-  const JSON_PATH = "{{ \'/search.json\' | relative_url }}";
+  // Correct Liquid-safe JSON path
+  const JSON_PATH = "{{ '/search.json' | relative_url }}";
+
   const debugEl = document.getElementById('debug');
-  function dbg(...args){ console.log(...args); debugEl.textContent = args.join(' | '); }
+  function dbg(...args) {
+    console.log(...args);
+    debugEl.textContent = args.join(" | ");
+  }
+
+  const resultsEl = document.getElementById("search-results");
+  const searchBox = document.getElementById("search-box");
+  const loadMoreBtn = document.getElementById("load-more");
 
   let posts = [];
   let visibleCount = 0;
   const batchSize = 10;
-  const resultsEl = document.getElementById('search-results');
-  const searchBox = document.getElementById('search-box');
-  const loadMoreBtn = document.getElementById('load-more');
 
-  // load posts
+  // Load posts from search.json
   try {
-    dbg('fetching', JSON_PATH);
+    dbg("Fetching:", JSON_PATH);
     const res = await fetch(JSON_PATH);
-    if (!res.ok) throw new Error('fetch status ' + res.status);
+    if (!res.ok) throw new Error("Fetch failed: " + res.status);
     posts = await res.json();
-    dbg('posts loaded:', posts.length);
+    dbg("Loaded posts:", posts.length);
   } catch (err) {
-    dbg('error loading search.json:', err.message);
+    dbg("Error:", err.message);
     console.error(err);
     return;
   }
 
-  // Prepare Fuse
+  // Fuse.js configuration
   const fuse = new Fuse(posts, {
     keys: [
-      { name: 'title', weight: 0.7 },
-      { name: 'excerpt', weight: 0.3 },
-      { name: 'content', weight: 0.1 },
-      { name: 'tags', weight: 0.4 }
+      { name: "title", weight: 0.7 },
+      { name: "excerpt", weight: 0.3 },
+      { name: "content", weight: 0.1 },
+      { name: "tags", weight: 0.4 }
     ],
-    threshold: 0.35, // lower = stricter; tweak as needed
+    threshold: 0.35,
     includeScore: true,
     shouldSort: true,
   });
 
+  // Escape HTML safely
+  function escapeHtml(str) {
+    return String(str || "").replace(/[&<>"']/g, (m) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[m]));
+  }
+
+  // Post card template
   function createPostCard(post) {
     return `
-      <article class="p-3 border rounded">
-        <h2 class="text-xl font-semibold"><a href="${post.url}" class="text-blue-600 hover:underline">${escapeHtml(post.title)}</a></h2>
-        <p class="text-gray-600 text-sm mt-1">${escapeHtml(post.excerpt || '').substring(0, 300)}</p>
-        <a href="${post.url}" class="text-sm text-blue-500 hover:underline mt-2 inline-block">Read more →</a>
+      <article class="p-3 border rounded shadow-sm">
+        <h2 class="text-xl font-semibold">
+          <a href="${post.url}" class="text-blue-600 hover:underline">
+            ${escapeHtml(post.title)}
+          </a>
+        </h2>
+
+        <p class="text-gray-700 text-sm mt-1">
+          ${escapeHtml(post.excerpt || "").substring(0, 300)}
+        </p>
+
+        <a href="${post.url}" class="text-sm text-blue-500 hover:underline mt-2 inline-block">
+          Read more →
+        </a>
       </article>
     `;
   }
 
-  function escapeHtml(str){
-    return String(str || '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  }
-
+  // Initial rendering (first batch only)
   function renderInitial() {
-    resultsEl.innerHTML = '';
+    resultsEl.innerHTML = "";
     visibleCount = 0;
-    loadMoreBtn.classList.remove('hidden');
+    loadMoreBtn.classList.remove("hidden");
     showNextBatch();
   }
 
+  // Load more posts
   function showNextBatch() {
-    const nextBatch = posts.slice(visibleCount, visibleCount + batchSize);
-    nextBatch.forEach(p => resultsEl.insertAdjacentHTML('beforeend', createPostCard(p)));
-    visibleCount += nextBatch.length;
-    if (visibleCount >= posts.length) loadMoreBtn.classList.add('hidden');
-    dbg('visible', visibleCount, 'of', posts.length);
+    const next = posts.slice(visibleCount, visibleCount + batchSize);
+    next.forEach(p => resultsEl.insertAdjacentHTML("beforeend", createPostCard(p)));
+
+    visibleCount += next.length;
+    if (visibleCount >= posts.length) {
+      loadMoreBtn.classList.add("hidden");
+    }
+
+    dbg("Visible:", visibleCount, "of", posts.length);
   }
 
-  function showResults(resultList) {
-    resultsEl.innerHTML = resultList.map(r => createPostCard(r)).join('');
+  // Display search results
+  function showResults(list) {
+    resultsEl.innerHTML = list.map(p => createPostCard(p)).join("");
   }
 
+  // Fuzzy search
   function searchPosts(term) {
     term = term.toLowerCase().trim();
-    if (!term) { renderInitial(); return; }
+
+    if (!term) {
+      renderInitial();
+      return;
+    }
 
     const fuseResults = fuse.search(term);
     const mapped = fuseResults.map(r => r.item);
-    dbg('fuse hits', fuseResults.length);
+
+    dbg("Fuse hits:", fuseResults.length);
     showResults(mapped);
-    loadMoreBtn.classList.add('hidden');
+    loadMoreBtn.classList.add("hidden");
   }
 
-  // wire events
-  searchBox.addEventListener('input', () => searchPosts(searchBox.value));
-  loadMoreBtn.addEventListener('click', showNextBatch);
+  // Events
+  searchBox.addEventListener("input", () => searchPosts(searchBox.value));
+  loadMoreBtn.addEventListener("click", showNextBatch);
 
-  // initial
+  // Start
   renderInitial();
 })();
 </script>
