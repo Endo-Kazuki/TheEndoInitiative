@@ -3,54 +3,152 @@ layout: default
 title: "Does Processes Count Matter?"
 permalink: /processcount/
 ---
-<p>This article will go over processes count and whether or not you need to concern yourself with lowering them.</p>
+<p class="mb-4">
+  This article will go over processes count and whether or not you need to concern yourself with lowering them.
+</p>
+
 <!--more-->
-<p>Let's start off with the key source of information people turn to when arguing against the process counter, <a href="https://zusier.xyz/blog/posts/process-count-doesnt-matter/" target="_blank" rel="noopener noreferrer">Zusier's Blog</a></p>
-<p>I highly recommend you check out the blog for yourself, but to summarize the key point... is that he ran a test in which he made a singular process to run as heavy as he possibly could make it; and turned out to be comparable to over 1,000 discord instances, causing his system to completely lock up over just the 1 process.</p>
-<p>Then Zusier did the opposite as well, he made over 3000 process counts that were programmed to only sleep; lo and behold he could play games perfectly fine without any issue.</p>
-<p>The conclusion that he wants everyone to see is that <u>the number itself is not a problem</u> with your machine's performance; it is that <u>certain processes on your machine are the cause</u> and that to truly know what is slowing down your machine, you need to look at alternative stats like 'cycles delta' and 'context switch delta' (can be viewed with <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer" target="_blank" rel="noopener noreferrer">Process Explorer</a>). Both of which are much better measurements for what could be bogging down your system.</p>
 
-
-<h3>What are these measurements indicative of?</h3>
-<p><b>Cycles Delta:</b></p>
-<p>
-  <ul>
-    <li>The number of CPU clock cycles used between two sampling points. Helps track how much "work" the CPU did during that time</li>
-  </ul>
-</p>
-<p><b>Context Switching Delta:</b></p>
-<p>
-  <ul>
-    <li>The change in the number of context switches (task/process swaps) between samples. High deltas can indicate task-switching overhead or multitasking pressure.</li>
-  </ul>
-</p>
-  
-<p>In simple terms; it generally can tell you what's eating at your cpu, which usually means lesser performance on your system</p>
-<p>When using <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer" target="_blank" rel="noopener noreferrer">Process Explorer</a>, you can see these values by right clicking the 'Process' column (or any other) and hitting 'Select Column', afterwards go into the 'Process Performance' tab and check both 'CPU Cycles Delta' and 'Context Switch Delta'</p>
-
-
-<h3>What should you disable?</h3>
-<p>A great place to start would be disabling all of your startup applications; after that, you can close out applications like spotify, discord, browsers, or any other software that is running in your background. You can double check what may potentially be running in the background by visiting your tray icons in the bottom corner of your screen.</p>
-<p><img src="/images/processcount/tray.png" alt="pic of tray icon"></p>
-
-
-<h3>What about disabling Windows Services?</h3>
-<p>Disabling Windows Services just for frame benefit will not be notable in any regard</p>
-<p><img src="/images/processcount/frames.png" alt="pic of frames in fortnite" style="max-width:70%; height:auto;"></p>
-<p>The most that disabling Windows services does for you is reducing the amount of RAM usage; but you must ask yourself if it's really worth risking the chance at bricking your machine beyond fixing and needing to reinstall windows.</p>
-
-
-<h3>Conclusion</h3>
-<p>Don't chase a low number just for your own ego; target specific apps running on your machine with <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer" target="_blank" rel="noopener noreferrer">Process Explorer</a>, disable all startup apps, and ensure you have no background apps running by checking the tray icons (won't always show everything running, but most apps have a tray icon). And remember that disabling Windows Services in bulk is a sure-fire way to brick your device, the benefits don't outweigh the risk.</p>
-<h3>Source for Documentation</h3>
-<p>
-  <ul>
-    <li><a href="https://zusier.xyz/blog/posts/process-count-doesnt-matter/" target="_blank" rel="noopener noreferrer">Zusier's Blog</a></li>
-    <li><a href="https://learn.microsoft.com/en-us/windows/win32/procthread/context-switches" target="_blank" rel="noopener noreferrer">Learn Microsoft</a></li>
-  </ul>
+<p class="mb-4">
+  Let's start off with the key source of information people turn to when arguing against the process counter,
+  <a href="https://zusier.xyz/blog/posts/process-count-doesnt-matter/" target="_blank" rel="noopener noreferrer"
+     class="text-blue-600 underline">
+    Zusier's Blog
+  </a>.
 </p>
 
-<h3>Event Viewer Flood</h3>
-<p><a href="https://www.youtube.com/watch?v=MHSETQRduUU" target="_blank" rel="noopener noreferrer">This video from Savitarax</a> also shows is that disabled services can cause the event viewer to get flooded with errors. No benchmarks were provided for the effect it can have on system. But Savitarax believes that it can be a detriment to performance to have these constant errors and windows trying to reenable services that can't be started. Even if it does not happen to have an effect though, I believe it was important to at least note that these errors occur</p>
+<p class="mb-4">
+  I highly recommend you check out the blog for yourself, but to summarize the key point... he ran a test where he made
+  a single process as heavy as possible; it ended up comparable to 1,000+ Discord instances and completely locked his system —
+  all from one process.
+</p>
 
-<h5> End of Article, feel free to reach out to me if you notice any errors or typos at website@endoinitiative.com </h5>
+<p class="mb-4">
+  Then Zusier did the opposite: he created 3,000 processes that only slept. And he could still play games perfectly fine.
+</p>
+
+<p class="mb-4">
+  The conclusion he wants people to understand is that
+  <span class="underline font-semibold">the number itself is not the problem</span>;
+  rather,
+  <span class="underline font-semibold">specific processes causing load are the problem</span>.
+  To truly know what’s slowing down your machine, you should look at metrics like
+  <span class="font-semibold">Cycles Delta</span> and <span class="font-semibold">Context Switch Delta</span>
+  (available in
+  <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer"
+     target="_blank" rel="noopener noreferrer"
+     class="text-blue-600 underline">
+    Process Explorer
+  </a>).
+</p>
+
+<h3 class="text-xl font-semibold mt-8 mb-3">What are these measurements indicative of?</h3>
+
+<div class="mb-4">
+  <p class="font-bold">Cycles Delta:</p>
+  <ul class="list-disc ml-6 mt-1">
+    <li>The number of CPU clock cycles used between samples. Shows how much “work” the CPU is doing.</li>
+  </ul>
+</div>
+
+<div class="mb-4">
+  <p class="font-bold">Context Switching Delta:</p>
+  <ul class="list-disc ml-6 mt-1">
+    <li>The change in context switches between samples. High deltas indicate task-switching overhead.</li>
+  </ul>
+</div>
+
+<p class="mb-4">
+  In simple terms: these values help you see what’s eating at your CPU, which often correlates to reduced performance.
+</p>
+
+<p class="mb-4">
+  In
+  <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer"
+     target="_blank" rel="noopener noreferrer"
+     class="text-blue-600 underline">
+    Process Explorer
+  </a>,
+  you can enable these by right-clicking any column, selecting “Select Columns,” and enabling
+  <span class="font-semibold">CPU Cycles Delta</span> and
+  <span class="font-semibold">Context Switch Delta</span>.
+</p>
+
+<h3 class="text-xl font-semibold mt-8 mb-3">What should you disable?</h3>
+
+<p class="mb-4">
+  A great place to start is disabling startup applications. After that, close things like Spotify, Discord, browsers,
+  or anything else running in the background. You can check some of what’s running in your tray icons.
+</p>
+
+<p class="mb-4">
+  <img src="/images/processcount/tray.png" alt="Tray icons example"
+       class="rounded border max-w-full h-auto">
+</p>
+
+<h3 class="text-xl font-semibold mt-8 mb-3">What about disabling Windows Services?</h3>
+
+<p class="mb-4">
+  Disabling Windows services for FPS gain is not useful — the improvement is not measurable.
+</p>
+
+<p class="mb-4">
+  <img src="/images/processcount/frames.png" alt="Frames example"
+       class="rounded border max-w-[70%] mx-auto h-auto">
+</p>
+
+<p class="mb-4">
+  The main effect of disabling services is reducing RAM usage — but the risk is enormous.  
+  You can easily break your system to the point that it won't boot without reinstalling Windows.
+</p>
+
+<h3 class="text-xl font-semibold mt-8 mb-3">Conclusion</h3>
+
+<p class="mb-4">
+  Don’t chase a low process number for ego.  
+  Target specific misbehaving apps using
+  <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer"
+     target="_blank" rel="noopener noreferrer"
+     class="text-blue-600 underline">
+    Process Explorer
+  </a>.
+  Disable startup apps, close unnecessary background apps, and avoid bulk-disabling Windows services.  
+  The risks do not outweigh the gains.
+</p>
+
+<h3 class="text-xl font-semibold mt-8 mb-3">Sources</h3>
+
+<ul class="list-disc ml-6 mb-6">
+  <li>
+    <a href="https://zusier.xyz/blog/posts/process-count-doesnt-matter/"
+       target="_blank" rel="noopener noreferrer"
+       class="text-blue-600 underline">
+      Zusier's Blog
+    </a>
+  </li>
+  <li>
+    <a href="https://learn.microsoft.com/en-us/windows/win32/procthread/context-switches"
+       target="_blank" rel="noopener noreferrer"
+       class="text-blue-600 underline">
+      Learn Microsoft
+    </a>
+  </li>
+</ul>
+
+<h3 class="text-xl font-semibold mt-8 mb-3">Event Viewer Flood</h3>
+
+<p class="mb-4">
+  <a href="https://www.youtube.com/watch?v=MHSETQRduUU" target="_blank" rel="noopener noreferrer"
+     class="text-blue-600 underline">
+    This video from Savitarax
+  </a>
+  shows that disabling services can flood Event Viewer with errors. No benchmarks were provided, but he believes
+  the constant error loop can negatively affect performance. Even if it doesn’t, it’s important to know these errors occur.
+</p>
+
+<p class="text-sm text-gray-600 mt-8">
+  <span class="font-semibold">End of Article</span> — feel free to reach out if you notice any errors or typos:<br>
+  <a href="mailto:website@endoinitiative.com" class="text-blue-600 underline">
+    website@endoinitiative.com
+  </a>
+</p>
