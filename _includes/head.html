@@ -4,7 +4,8 @@
 <title>{{ page.title }} - {{ site.title }}</title>
 
 <!-- tailwind css comp -->
-<link href="./src/style.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ '/src/style.css' | relative_url }}">
+
 
 <!-- Favicons -->
 {% include _favicon.html %}
